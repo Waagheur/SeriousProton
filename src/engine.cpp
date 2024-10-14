@@ -194,7 +194,7 @@ void Engine::runMainLoop()
 		// std::future<void> task2;
         while(running)
         {
-			auto preEvents = std::chrono::high_resolution_clock::now();
+			// auto preEvents = std::chrono::high_resolution_clock::now();
             // Handle events
             SDL_Event event;
             while (SDL_PollEvent(&event))
@@ -206,8 +206,8 @@ void Engine::runMainLoop()
             if (debug_output_timer.isExpired())
                 LOG(DEBUG) << "Object count: " << DEBUG_PobjCount << " " << updatableList.size();
 #endif
-			auto postEvents = std::chrono::high_resolution_clock::now();
-			std::cout << "(postEvents - preEvents).count()" << (postEvents - preEvents).count() << std::endl;
+			// auto postEvents = std::chrono::high_resolution_clock::now();
+			// std::cout << "(postEvents - preEvents).count()" << (postEvents - preEvents).count() << std::endl;
             float delta = frame_timer.restart();
             if (delta > 0.5f)
                 delta = 0.5f;
@@ -217,7 +217,7 @@ void Engine::runMainLoop()
             EngineTiming engine_timing;
             
             sp::SystemStopwatch engine_timing_stopwatch;
-			auto preUpdates = std::chrono::high_resolution_clock::now();
+			// auto preUpdates = std::chrono::high_resolution_clock::now();
 			
 			// foreach(Updatable, u, safeUpdatableList) {
 				// u->update(delta);
@@ -287,12 +287,12 @@ void Engine::runMainLoop()
 				tasks.push_back(std::async(std::launch::async, &Updatable::safeUpdate, *u, delta));
 			}
 					
-			auto postUpdates = std::chrono::high_resolution_clock::now();
-			std::cout << "(postUpdates - preUpdates).count()" << (postUpdates - preUpdates).count() << std::endl;
+			// auto postUpdates = std::chrono::high_resolution_clock::now();
+			// std::cout << "(postUpdates - preUpdates).count()" << (postUpdates - preUpdates).count() << std::endl;
 				
             elapsedTime += delta;
             engine_timing.update = engine_timing_stopwatch.restart();
-			auto preCollisions = std::chrono::high_resolution_clock::now();
+			// auto preCollisions = std::chrono::high_resolution_clock::now();
             
 			// source
 			CollisionManager::handleCollisions(delta);
@@ -304,8 +304,8 @@ void Engine::runMainLoop()
 			// t.detach();
 				
             engine_timing.collision = engine_timing_stopwatch.restart();
-			auto postCollisions = std::chrono::high_resolution_clock::now();
-			std::cout << "(postCollisions - preCollisions).count()" << (postCollisions - preCollisions).count() << std::endl;
+			// auto postCollisions = std::chrono::high_resolution_clock::now();
+			// std::cout << "(postCollisions - preCollisions).count()" << (postCollisions - preCollisions).count() << std::endl;
 			
             ScriptObject::clearDestroyedObjects();
             soundManager->updateTick();
@@ -314,7 +314,7 @@ void Engine::runMainLoop()
 #endif
 
             // Clear the window
-			auto preRender = std::chrono::high_resolution_clock::now();
+			// auto preRender = std::chrono::high_resolution_clock::now();
 			// Source
             for(auto window : Window::all_windows)
                 window->render();
@@ -324,8 +324,8 @@ void Engine::runMainLoop()
 				// td.detach();
 				// task = std::async(std::launch::async, &Window::render, *window);
 			// }
-			auto postRender = std::chrono::high_resolution_clock::now();
-			std::cout << "(postRender - preRender).count()" << (postRender - preRender).count() << std::endl;
+			// auto postRender = std::chrono::high_resolution_clock::now();
+			// std::cout << "(postRender - preRender).count()" << (postRender - preRender).count() << std::endl;
 			
             engine_timing.render = engine_timing_stopwatch.restart();
             engine_timing.server_update = 0.0f;
@@ -338,8 +338,8 @@ void Engine::runMainLoop()
 
             sp::io::Keybinding::allPostUpdate();
 			
-			auto postLoop = std::chrono::high_resolution_clock::now();
-			std::cout << "(postLoop - postCollisions).count()" << (postLoop - postCollisions).count() << std::endl;
+			// auto postLoop = std::chrono::high_resolution_clock::now();
+			// std::cout << "(postLoop - postCollisions).count()" << (postLoop - postCollisions).count() << std::endl;
         }
         soundManager->stopMusic();
         sp::audio::Source::stopAudioSystem();
